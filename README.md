@@ -1,1 +1,1 @@
-# alpha0
+I got this project by chance.It started with a simple idea of generating an island with Perlin noise.Then I wanted to add the charater into it.The texture of the player is from The King and Pigs I found in Indienova.(by the way,the textures of the blocks are from Minecraft).then I also want to add the enemies,the gun towers etc.It is glad to see how the project gets its growth and development day by day.Cheers.
