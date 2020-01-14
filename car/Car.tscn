@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://car/Car.gd" type="Script" id=1]
+[ext_resource path="res://car/spritesheet_vehicles.png" type="Texture" id=2]
+[ext_resource path="res://car/Car.tres" type="Shape2D" id=3]
+[ext_resource path="res://light.tscn" type="PackedScene" id=4]
+
+[node name="Car" type="KinematicBody2D"]
+scale = Vector2( 0.5, 0.5 )
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+show_behind_parent = true
+rotation = 1.5708
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 217, 250, 72, 132.446 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = ExtResource( 3 )
+
+[node name="Light2D" parent="." instance=ExtResource( 4 )]
+visible = false
+position = Vector2( 59.486, -2.27668 )
+color = Color( 0.466667, 0.443137, 0.294118, 1 )
+energy = 0.01
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true

@@ -1,0 +1,267 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://Game/Main/Node2D.gd" type="Script" id=1]
+[ext_resource path="res://Tile/Ground.res" type="TileSet" id=2]
+[ext_resource path="res://Game/TerrianGenerator/TileMap.gd" type="Script" id=3]
+[ext_resource path="res://Tile/Building.res" type="TileSet" id=4]
+[ext_resource path="res://Game/Main/Navigation2D.gd" type="Script" id=5]
+[ext_resource path="res://asset/textures/blocks/glass.png" type="Texture" id=6]
+[ext_resource path="res://lighting/CanvasModulate.gd" type="Script" id=7]
+[ext_resource path="res://log/Timer.gd" type="Script" id=8]
+[ext_resource path="res://Game/Main/YSort.gd" type="Script" id=9]
+[ext_resource path="res://character/player/Player.tscn" type="PackedScene" id=10]
+[ext_resource path="res://character/kids/Kids.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Game/Main/Time.gd" type="Script" id=12]
+[ext_resource path="res://Game/Main/Fps.gd" type="Script" id=13]
+[ext_resource path="res://Game/Main/Begin.gd" type="Script" id=14]
+[ext_resource path="res://Game/fog.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Game/fog.gd" type="Script" id=16]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+void fragment()
+{
+	
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="NavigationPolygon" id=3]
+vertices = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+
+[sub_resource type="TileSet" id=4]
+0/name = "glass.png 0"
+0/texture = ExtResource( 6 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 16, 16 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/navigation = SubResource( 3 )
+0/shapes = [  ]
+0/z_index = 0
+
+[sub_resource type="Animation" id=5]
+resource_name = "day"
+length = 600.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"update": 0,
+"values": [  ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( -5.2, 0.3, 49, 93.7, 132.5, 159.7, 256, 350.7, 391.1, 455.2, 468, 502.6, 529.3, 592.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.92549, 0.952941, 1, 1 ), Color( 0.796078, 0.972549, 1, 1 ), Color( 1, 1, 0.588235, 1 ), Color( 1, 0.913725, 0.364706, 1 ), Color( 0.141176, 0.152941, 0.196078, 1 ), Color( 0.0823529, 0.0941176, 0.109804, 1 ), Color( 0.101961, 0.121569, 0.152941, 1 ), Color( 0.156863, 0.168627, 0.192157, 1 ), Color( 0.231373, 0.25098, 0.329412, 1 ), Color( 1, 0.631373, 0, 1 ), Color( 0.780392, 0.862745, 1, 1 ), Color( 0.866127, 0.962533, 0.884267, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Ground" type="TileMap" parent="."]
+material = SubResource( 2 )
+z_index = -4096
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 0
+collision_mask = 0
+occluder_light_mask = 0
+format = 1
+script = ExtResource( 3 )
+
+[node name="Floor" type="TileMap" parent="Ground"]
+position = Vector2( -2, 0 )
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 0
+collision_mask = 0
+occluder_light_mask = 0
+format = 1
+
+[node name="Building" type="TileMap" parent="Ground"]
+z_index = 1
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 16, 16 )
+format = 1
+
+[node name="Navigation2D" type="Navigation2D" parent="."]
+visible = false
+script = ExtResource( 5 )
+
+[node name="TileMap" type="TileMap" parent="Navigation2D"]
+tile_set = SubResource( 4 )
+cell_size = Vector2( 16, 16 )
+format = 1
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color( 0.164706, 0.176471, 0.196078, 1 )
+script = ExtResource( 7 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasModulate"]
+anims/day = SubResource( 5 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+script = ExtResource( 8 )
+
+[node name="Line2D" type="Line2D" parent="."]
+z_index = -4095
+width = 3.0
+default_color = Color( 0, 0, 0, 0.501961 )
+texture_mode = 36
+
+[node name="YSort" type="YSort" parent="."]
+script = ExtResource( 9 )
+
+[node name="Player" parent="YSort" instance=ExtResource( 10 )]
+position = Vector2( 52, 12 )
+
+[node name="Kid" parent="YSort" instance=ExtResource( 11 )]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="Wood" type="Label" parent="HUD"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Wood:0"
+
+[node name="Time" type="Label" parent="HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -38.0
+margin_right = 11.0
+margin_bottom = 14.0
+script = ExtResource( 12 )
+
+[node name="HP" type="Label" parent="HUD"]
+margin_left = 1.54758
+margin_top = 17.0233
+margin_right = 47.5476
+margin_bottom = 31.0233
+text = "HP:100"
+
+[node name="Days" type="Label" parent="HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -34.0
+margin_top = 19.0
+margin_bottom = 38.0
+text = "DAY1"
+
+[node name="Fps" type="Label" parent="HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -44.0
+margin_top = 35.0
+margin_right = -10.0
+margin_bottom = 54.0
+text = "Fps:"
+script = ExtResource( 13 )
+
+[node name="Tabs" type="Panel" parent="HUD"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -73.0
+margin_top = -51.5
+margin_right = 73.0
+margin_bottom = 51.5
+
+[node name="Label" type="Label" parent="HUD/Tabs"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -56.0
+margin_top = 20.0
+margin_right = 56.0
+margin_bottom = 68.0
+text = "You are now dead
+click to continue"
+
+[node name="Button" type="Button" parent="HUD/Tabs"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -34.5
+margin_top = -20.0
+margin_right = 34.5
+text = "Continue"
+
+[node name="Begin" type="Panel" parent="HUD"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -255.956
+margin_top = -75.2244
+margin_right = 301.044
+margin_bottom = 133.776
+script = ExtResource( 14 )
+
+[node name="Label" type="Label" parent="HUD/Begin"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -254.5
+margin_top = -49.5
+margin_right = 254.5
+margin_bottom = 49.5
+text = "You are deserted to this poor island.Now is the daytime that is safe to you.
+But when the night comes,it will be very dangours to be alive.So you must 
+cut down some trees to build a house which can protect you from the enemies.
+Then click your right button to build a block.
+click your left button to destroy a block."
+
+[node name="Button" type="Button" parent="HUD/Begin"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -34.5
+margin_top = -20.0
+margin_right = 34.5
+text = "Continue"
+
+[node name="CheckButton" type="CheckButton" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -105.0
+margin_top = -40.0
+margin_right = -3.0
+text = "Fog"
+
+[node name="glass" parent="." instance=ExtResource( 15 )]
+visible = false
+position = Vector2( 0.663391, 0.663452 )
+scale = Vector2( 128, 128 )
+script = ExtResource( 16 )
+[connection signal="generate_finished" from="Ground" to="Navigation2D" method="_on_Ground_generate_finished"]
+[connection signal="timeout" from="Timer" to="Timer" method="_on_Timer_timeout"]
+[connection signal="pressed" from="HUD/Tabs/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="HUD/Begin/Button" to="HUD/Begin" method="_on_Button_pressed"]
+[connection signal="toggled" from="HUD/CheckButton" to="glass" method="_on_CheckButton_toggled"]
